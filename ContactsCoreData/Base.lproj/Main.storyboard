@@ -698,7 +698,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="addClassesAction:" target="XfG-lQ-9wD" id="weo-eU-ie1"/>
+                                    <action selector="addAction:" target="XfG-lQ-9wD" id="1gK-0G-RNo"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="wBP-Ot-uCf">
@@ -712,7 +712,7 @@
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="deleteClassesAction:" target="XfG-lQ-9wD" id="mYn-S6-CHi"/>
+                                    <action selector="deleteAction:" target="XfG-lQ-9wD" id="6M6-o4-zrb"/>
                                 </connections>
                             </button>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="5Uf-E9-X1i">
@@ -1195,41 +1195,57 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableHeaderView>
                             </scrollView>
-                            <searchField wantsLayer="YES" verticalHuggingPriority="750" ambiguous="YES" misplaced="YES" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q2A-dU-PnA">
-                                <rect key="frame" x="193" y="20" width="635" height="22"/>
+                            <searchField wantsLayer="YES" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q2A-dU-PnA">
+                                <rect key="frame" x="185" y="22" width="815" height="22"/>
                                 <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="vgn-IS-Y5a">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </searchFieldCell>
                                 <connections>
-                                    <action selector="queryClassesAction:" target="XfG-lQ-9wD" id="Iki-eq-VhL"/>
+                                    <action selector="queryAction:" target="XfG-lQ-9wD" id="Bp3-I1-Vd7"/>
                                 </connections>
                             </searchField>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="faa-Zr-nSW">
-                                <rect key="frame" x="849" y="21" width="69" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="faa-Zr-nSW">
+                                <rect key="frame" x="1030" y="21" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="Biu-cm-bxr"/>
+                                    <constraint firstAttribute="width" constant="25" id="ImT-ty-e0x"/>
+                                </constraints>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="undo" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="Gnt-wu-lDG">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="undoAction:" target="XfG-lQ-9wD" id="6qs-dm-vFk"/>
+                                </connections>
                             </button>
-                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SIf-vQ-Mzc">
-                                <rect key="frame" x="926" y="20" width="69" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="SIf-vQ-Mzc">
+                                <rect key="frame" x="1085" y="21" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="16X-dF-KOP"/>
+                                    <constraint firstAttribute="width" constant="25" id="Szo-yc-3Tr"/>
+                                </constraints>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="redo" imagePosition="overlaps" alignment="center" imageScaling="proportionallyDown" inset="2" id="jSw-UW-OXO">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
+                                <connections>
+                                    <action selector="redoAction:" target="XfG-lQ-9wD" id="zKV-1c-osP"/>
+                                </connections>
                             </button>
-                            <button verticalHuggingPriority="750" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XoT-ao-zGk">
-                                <rect key="frame" x="1052" y="17" width="128" height="32"/>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="XoT-ao-zGk">
+                                <rect key="frame" x="1140" y="14" width="40" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="PbB-oz-7rD"/>
+                                    <constraint firstAttribute="width" constant="40" id="Ygz-gF-twe"/>
+                                </constraints>
                                 <buttonCell key="cell" type="bevel" bezelStyle="rounded" image="save" imagePosition="only" alignment="center" imageScaling="proportionallyDown" inset="2" id="nnL-qa-hsn">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                     <font key="font" metaFont="system"/>
                                 </buttonCell>
                                 <connections>
-                                    <action selector="saveAction:" target="XfG-lQ-9wD" id="SmN-cR-qrv"/>
+                                    <action selector="saveAction:" target="XfG-lQ-9wD" id="8aD-Mn-WhT"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -1237,17 +1253,22 @@
                             <constraint firstAttribute="bottom" secondItem="LGr-8E-H05" secondAttribute="bottom" constant="20" id="7UL-6x-8uy"/>
                             <constraint firstAttribute="trailing" secondItem="XoT-ao-zGk" secondAttribute="trailing" constant="20" id="8td-GS-aML"/>
                             <constraint firstItem="wBP-Ot-uCf" firstAttribute="centerY" secondItem="LGr-8E-H05" secondAttribute="centerY" id="JuM-2Z-8J2"/>
+                            <constraint firstItem="SIf-vQ-Mzc" firstAttribute="leading" secondItem="faa-Zr-nSW" secondAttribute="trailing" constant="30" id="LnY-nB-ywN"/>
                             <constraint firstItem="Q2A-dU-PnA" firstAttribute="centerY" secondItem="5Uf-E9-X1i" secondAttribute="centerY" id="MfZ-8N-rCY"/>
                             <constraint firstAttribute="trailing" secondItem="q8B-1E-Q43" secondAttribute="trailing" constant="20" id="PFQ-Us-e8e"/>
-                            <constraint firstAttribute="bottom" secondItem="XoT-ao-zGk" secondAttribute="bottom" constant="20" id="UlL-VI-6SC"/>
+                            <constraint firstItem="faa-Zr-nSW" firstAttribute="centerY" secondItem="Q2A-dU-PnA" secondAttribute="centerY" id="RxM-zR-jLj"/>
                             <constraint firstItem="5Uf-E9-X1i" firstAttribute="leading" secondItem="wBP-Ot-uCf" secondAttribute="trailing" constant="30" id="Ulg-hy-R4U"/>
+                            <constraint firstItem="XoT-ao-zGk" firstAttribute="centerY" secondItem="SIf-vQ-Mzc" secondAttribute="centerY" id="WCP-2y-Mf7"/>
                             <constraint firstItem="q8B-1E-Q43" firstAttribute="leading" secondItem="kfk-Ol-W1P" secondAttribute="leading" constant="20" id="eva-a0-mZr"/>
                             <constraint firstItem="Q2A-dU-PnA" firstAttribute="leading" secondItem="5Uf-E9-X1i" secondAttribute="trailing" constant="30" id="gke-vm-9kS"/>
                             <constraint firstItem="LGr-8E-H05" firstAttribute="top" secondItem="q8B-1E-Q43" secondAttribute="bottom" constant="20" id="hD1-cy-bvj"/>
+                            <constraint firstItem="XoT-ao-zGk" firstAttribute="leading" secondItem="SIf-vQ-Mzc" secondAttribute="trailing" constant="30" id="jLZ-Vb-pB9"/>
                             <constraint firstItem="LGr-8E-H05" firstAttribute="leading" secondItem="kfk-Ol-W1P" secondAttribute="leading" constant="20" id="kWU-lB-HXa"/>
                             <constraint firstItem="5Uf-E9-X1i" firstAttribute="centerY" secondItem="wBP-Ot-uCf" secondAttribute="centerY" id="kds-fU-hcS"/>
                             <constraint firstItem="q8B-1E-Q43" firstAttribute="top" secondItem="kfk-Ol-W1P" secondAttribute="top" constant="20" id="lvr-U4-aWn"/>
+                            <constraint firstItem="faa-Zr-nSW" firstAttribute="leading" secondItem="Q2A-dU-PnA" secondAttribute="trailing" constant="30" id="qlw-Xi-T4d"/>
                             <constraint firstItem="wBP-Ot-uCf" firstAttribute="leading" secondItem="LGr-8E-H05" secondAttribute="trailing" constant="30" id="wDJ-vT-TRk"/>
+                            <constraint firstItem="SIf-vQ-Mzc" firstAttribute="centerY" secondItem="faa-Zr-nSW" secondAttribute="centerY" id="xtD-bn-k44"/>
                         </constraints>
                     </view>
                     <connections>
