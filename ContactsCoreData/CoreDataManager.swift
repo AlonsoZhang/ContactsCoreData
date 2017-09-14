@@ -8,7 +8,7 @@
 import Foundation
 import Cocoa
 
-class ClassesManager: NSObject {
+class SWManager: NSObject {
     
     // MARK: - Core Data stack
     

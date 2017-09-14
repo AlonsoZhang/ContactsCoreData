@@ -8,48 +8,57 @@
 
 import Cocoa
 
-class ViewController: NSViewController {
+class ViewController: NSViewController,NSFetchedResultsControllerDelegate {
 
     @IBOutlet var arrayController: NSArrayController!
     
     @IBOutlet weak var tableView: NSTableView!
-    dynamic lazy var classesManager: ClassesManager = {
-        return ClassesManager()
+    
+    var controller: NSFetchedResultsController<SW>!
+    
+    dynamic lazy var swManager: SWManager = {
+        return SWManager()
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         try? self.arrayController.fetch(with: nil, merge: false)
-        let directory = NSHomeDirectory()
-        print(directory)
+//        let fetchRequest: NSFetchRequest<SW> = SW.fetchRequest()
+//        let dateSort = NSSortDescriptor(key: "chinesename", ascending: false)
+//        fetchRequest.sortDescriptors = [dateSort]
+//        let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: self.swManager.persistentContainer.viewContext, sectionNameKeyPath: nil, cacheName: nil)
+//        controller.delegate = self
+//        self.controller = controller
+//        do {
+//            try controller.performFetch()
+//        } catch {
+//            let error = error as NSError
+//            print("\(error)")
+//        }
     }
     
     override func viewDidAppear() {
-        self.classesManager.persistentContainer.viewContext.undoManager = self.undoManager
+        self.swManager.persistentContainer.viewContext.undoManager = self.undoManager
     }
     
     @IBAction func addClassesAction(_ sender: NSButton){
-        let classes = NSEntityDescription.insertNewObject(forEntityName: "SW", into: self.classesManager.persistentContainer.viewContext) as! SW
-//        classes.chinesename = "unTitled";
-//        classes.studentsNum = 0;
-//        classes.motto = "qqq";
-        
+        let swes = NSEntityDescription.insertNewObject(forEntityName: "SW", into: self.swManager.persistentContainer.viewContext) as! SW
+        swes.chinesename = "new";
     }
     
     @IBAction func deleteClassesAction(_ sender: NSButton){
         let selectedObjects:[SW]  = self.arrayController.selectedObjects as! [SW]
-        for classObject: SW  in selectedObjects {
-            self.classesManager.persistentContainer.viewContext.delete(classObject)
+        for classObject: SW in selectedObjects {
+            self.swManager.persistentContainer.viewContext.delete(classObject)
         }
     }
-    
     
     @IBAction func uploadPhotoAction(_ sender: NSButton){
         let index = self.tableView.selectedRow
         if index < 0 {
             return
         }
-        self.openSelectClassPhotoFilePanel()
+        //self.openSelectClassPhotoFilePanel()
     }
     
     func openSelectClassPhotoFilePanel() {
@@ -58,7 +67,6 @@ class ViewController: NSViewController {
         openDlg.canChooseDirectories = false
         openDlg.allowsMultipleSelection = false
         openDlg.allowedFileTypes = ["png"]
-        
         openDlg.begin(completionHandler: { [weak self]  result in
             if(result == NSFileHandlingPanelOKButton){
                 let fileURLs = openDlg.urls
@@ -69,35 +77,37 @@ class ViewController: NSViewController {
                     let arrangedObjects = self?.arrayController.arrangedObjects as! [SW]
                     let index = self?.tableView.selectedRow
                     let classObj = arrangedObjects[index!]
-                    classObj.photo = imageData as NSData?;
+                    classObj.photo = imageData as NSData?
                 }
             }
         })
     }
     
     @IBAction func saveAction(_ sender: NSButton){
-        self.classesManager.saveAction(sender)
+        //let arrangedObjects = self.arrayController.arrangedObjects as! [SW]
+       // let count = controller.sections?.count ?? 0
+//        for index in 0..<count {
+//            let classObj = arrangedObjects[index]
+//            //print(classObj.description)
+//        }//
+        self.swManager.saveAction(sender)
     }
     
-    
     @IBAction func queryClassesAction(_ sender: NSSearchField) {
-        
         let content = sender.stringValue
         if content.characters.count <= 0 {
             return
         }
-        
         let predicate: NSPredicate = NSPredicate(format:content)
         self.arrayController.filterPredicate = predicate
-        
     }
     
     @IBAction func undo(_ sender: AnyObject){
-        self.classesManager.persistentContainer.viewContext.undoManager?.undo()
+        self.swManager.persistentContainer.viewContext.undoManager?.undo()
     }
     
     @IBAction func redo(_ sender: AnyObject){
-        self.classesManager.persistentContainer.viewContext.undoManager?.redo()
+        self.swManager.persistentContainer.viewContext.undoManager?.redo()
     }
 
 }

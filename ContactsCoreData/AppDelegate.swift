@@ -11,6 +11,9 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 
+    dynamic lazy var swManager: SWManager = {
+        return SWManager()
+    }()
 
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
