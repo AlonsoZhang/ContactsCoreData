@@ -12,6 +12,9 @@ class ViewController: NSViewController {
 
     @IBOutlet var arrayController: NSArrayController!
     @IBOutlet weak var tableView: NSTableView!
+    
+    let dlURL = "http://10.42.222.70/AEOverlay/Code_TOOLS/Contacts"
+    
     dynamic lazy var swManager: SWManager = {
         return SWManager()
     }()
@@ -55,8 +58,13 @@ class ViewController: NSViewController {
     
     @IBAction func inputAction(_ sender: NSButton) {
         let file = Bundle.main.path(forResource:"ContactsCSV", ofType: "csv")!
-        let url = URL(fileURLWithPath: "/Users/alonso/Desktop/Pic")
-        let manager = FileManager.default
+        let fileManager = FileManager.default
+        let myDirectory:String = NSHomeDirectory() + "/Documents/Pic"
+        let exist = fileManager.fileExists(atPath: myDirectory)
+        if !exist {
+            try! fileManager.createDirectory(atPath: myDirectory,withIntermediateDirectories: true, attributes: nil)
+        }
+        let url = URL(fileURLWithPath: myDirectory)
         if let readData = NSData(contentsOfFile: file) {
             let readStr = NSString(data: readData as Data, encoding: String.Encoding.utf8.rawValue)!
             var readArr = readStr.components(separatedBy: "\r\n")
@@ -73,20 +81,57 @@ class ViewController: NSViewController {
                 swmember.shortnumber = memberinfoArr[7]
                 swmember.email = memberinfoArr[9]
                 swmember.imessage = memberinfoArr[10]
-                let enumeratorAtPath = manager.enumerator(atPath: url.path)
-                for logpath in enumeratorAtPath! {
-                    if "\(logpath)" == "\(memberinfoArr[2]).png"{
-                        let image = NSImage(contentsOf: url.appendingPathComponent("\(logpath)"))
-                        let imageRepresentations = image?.representations
-                        let imageData = NSBitmapImageRep.representationOfImageReps(in: imageRepresentations!, using: .PNG, properties: [:])
+                urlSessionDownloadFileTest(member: memberinfoArr[2])
+                
+                let exist = fileManager.fileExists(atPath: myDirectory + "/" + memberinfoArr[2] + ".png")
+                if exist {
+                    let image = NSImage(contentsOf: url.appendingPathComponent("\(memberinfoArr[2]).png"))
+                    if let imageRepresentations = image?.representations{
+                        let imageData = NSBitmapImageRep.representationOfImageReps(in: imageRepresentations, using: .PNG, properties: [:])
                         swmember.photo = imageData as NSData?
                     }
+                    else{
+                        print("\(memberinfoArr[2]) error Pic")
+                    }
+                }else{
+                    print("\(memberinfoArr[2]) no Pic")
                 }
             }
             self.swManager.saveAction(nil)
         } else {
             print("Null")
         }
+    }
+    
+    func sessionSimpleDownload(){
+        let url = URL(string: "http://hangge.com/blog/images/logo.png")
+        let request = URLRequest(url: url!)
+        let session = URLSession.shared
+        let downloadTask = session.downloadTask(with: request,
+                                                completionHandler: {
+                                                    (location:URL?, response:URLResponse?, error:Error?)
+                                                    -> Void in
+                                                    //输出下载文件原来的存放目录
+                                                    print("location:\(String(describing: location))")
+                                                    //location位置转换
+                                                    let locationPath = location!.path
+                                                    //拷贝到用户目录
+                                                    let documnets:String = NSHomeDirectory() + "/Documents/1.png"
+                                                    //创建文件管理器
+                                                    let fileManager = FileManager.default
+                                                    try! fileManager.moveItem(atPath: locationPath, toPath: documnets)
+                                                    print("new location:\(documnets)")
+        })
+        downloadTask.resume()
+    }
+    
+    func urlSessionDownloadFileTest(member:String) {
+        let defaultConfigObject = URLSessionConfiguration.default
+        let session = URLSession(configuration: defaultConfigObject, delegate: self, delegateQueue: nil)
+        let urlmember = member.replacingOccurrences(of: " ", with: "%20")
+        let url = URL(string: "\(dlURL)/Pic/\(urlmember).png")!
+        let task = session.downloadTask(with: url)
+        task.resume()
     }
     
     @IBAction func saveAction(_ sender: NSButton){
@@ -108,5 +153,27 @@ class ViewController: NSViewController {
     
     @IBAction func redoAction(_ sender: NSButton) {
         self.swManager.persistentContainer.viewContext.undoManager?.redo()
+    }
+}
+
+extension ViewController: URLSessionDownloadDelegate {
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        let fileName = downloadTask.originalRequest?.url?.lastPathComponent
+        let fileManager = FileManager.default
+        let downloadURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Documents/Pic").appendingPathComponent(fileName!)
+        do {
+            try fileManager.moveItem(at: location, to: downloadURL)
+        }
+        catch let error {
+            print("error \(error)")
+        }
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
+        print("receive bytes \(bytesWritten) of totalBytes \(totalBytesExpectedToWrite)")
+    }
+    
+    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
+        print("resumeAtOffset  bytes \(fileOffset) of totalBytes \(expectedTotalBytes)")
     }
 }
