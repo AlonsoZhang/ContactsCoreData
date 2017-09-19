@@ -10,6 +10,7 @@
 		E230FDAE1F6A04C900763D7B /* ContactsCSV.csv in Resources */ = {isa = PBXBuildFile; fileRef = E230FDAD1F6A04C900763D7B /* ContactsCSV.csv */; };
 		E230FDB51F6A312800763D7B /* SW+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E230FDB31F6A312800763D7B /* SW+CoreDataClass.swift */; };
 		E230FDB61F6A312800763D7B /* SW+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E230FDB41F6A312800763D7B /* SW+CoreDataProperties.swift */; };
+		E262A4251F70F974001DBDC2 /* Contacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = E262A4241F70F974001DBDC2 /* Contacts.swift */; };
 		E28057571F68F5E700479D3D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28057561F68F5E700479D3D /* AppDelegate.swift */; };
 		E28057591F68F5E700479D3D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E28057581F68F5E700479D3D /* ViewController.swift */; };
 		E280575C1F68F5E700479D3D /* ContactsCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E280575A1F68F5E700479D3D /* ContactsCoreData.xcdatamodeld */; };
@@ -22,6 +23,7 @@
 		E230FDAD1F6A04C900763D7B /* ContactsCSV.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ContactsCSV.csv; sourceTree = "<group>"; };
 		E230FDB31F6A312800763D7B /* SW+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SW+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E230FDB41F6A312800763D7B /* SW+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SW+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		E262A4241F70F974001DBDC2 /* Contacts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Contacts.swift; sourceTree = "<group>"; };
 		E28057531F68F5E700479D3D /* ContactsCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContactsCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E28057561F68F5E700479D3D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E28057581F68F5E700479D3D /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 			children = (
 				E28057561F68F5E700479D3D /* AppDelegate.swift */,
 				E28057581F68F5E700479D3D /* ViewController.swift */,
+				E262A4241F70F974001DBDC2 /* Contacts.swift */,
 				E280577C1F68F83300479D3D /* CoreDataManager.swift */,
 				E280575D1F68F5E700479D3D /* Assets.xcassets */,
 				E280575F1F68F5E700479D3D /* Main.storyboard */,
@@ -155,6 +158,7 @@
 				E280577D1F68F83300479D3D /* CoreDataManager.swift in Sources */,
 				E230FDB51F6A312800763D7B /* SW+CoreDataClass.swift in Sources */,
 				E28057571F68F5E700479D3D /* AppDelegate.swift in Sources */,
+				E262A4251F70F974001DBDC2 /* Contacts.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

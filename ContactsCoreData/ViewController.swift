@@ -7,9 +7,10 @@
 //
 
 import Cocoa
+import Contacts
 
 class ViewController: NSViewController {
-
+    
     @IBOutlet var arrayController: NSArrayController!
     @IBOutlet weak var tableView: NSTableView!
     
@@ -21,7 +22,21 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        try? self.arrayController.fetch(with: nil, merge: false)
+        try? self.arrayController.fetch(with: nil, merge: true)
+//        let contact = Contacts()
+//        
+//        let saveContactRequest = CNSaveRequest()
+//        do{
+//            let groups = try CNContactStore().groups(matching: nil)
+//            //print(groups)
+//        }catch{
+//            //print(error)
+//        }
+        //let addGroupRequest = CNSaveRequest.init()
+        
+        //let c = CNMutableContact()
+        //contact.setNewContact(contact: c, name: "张三", engname: "san zhang", phoneNum: "15700000000", shortNum: "666666")
+        //saveContactRequest.addMember(c, to: <#T##CNGroup#>)
     }
     
     override func viewDidAppear() {
@@ -32,6 +47,7 @@ class ViewController: NSViewController {
         let newmember = NSEntityDescription.insertNewObject(forEntityName: "SW", into: self.swManager.persistentContainer.viewContext) as! SW
         newmember.chinesename = "new";
         newmember.birthday = calcTimeInterval(dateStr: "2001-01-01")
+        newmember.photo = setPhotoData(picname: "Person")
     }
     
     func calcTimeInterval(dateStr:String) -> TimeInterval {
@@ -49,6 +65,13 @@ class ViewController: NSViewController {
         return timeInterval
     }
     
+    func setPhotoData(picname:String) -> NSData {
+        let image = NSImage(named: picname)
+        let imageRep = NSBitmapImageRep(data: (image?.tiffRepresentation)!)
+        let imageData = imageRep?.representation(using: .PNG, properties: [:])
+        return imageData! as NSData
+    }
+    
     @IBAction func deleteAction(_ sender: NSButton){
         let selectedObjects:[SW]  = self.arrayController.selectedObjects as! [SW]
         for classObject: SW in selectedObjects {
@@ -57,81 +80,63 @@ class ViewController: NSViewController {
     }
     
     @IBAction func inputAction(_ sender: NSButton) {
-        let file = Bundle.main.path(forResource:"ContactsCSV", ofType: "csv")!
-        let fileManager = FileManager.default
-        let myDirectory:String = NSHomeDirectory() + "/Documents/Pic"
-        let exist = fileManager.fileExists(atPath: myDirectory)
-        if !exist {
-            try! fileManager.createDirectory(atPath: myDirectory,withIntermediateDirectories: true, attributes: nil)
+        let selectedObjects:[SW]  = self.arrayController.arrangedObjects as! [SW]
+        for classObject: SW in selectedObjects {
+            self.swManager.persistentContainer.viewContext.delete(classObject)
         }
-        let url = URL(fileURLWithPath: myDirectory)
-        if let readData = NSData(contentsOfFile: file) {
-            let readStr = NSString(data: readData as Data, encoding: String.Encoding.utf8.rawValue)!
-            var readArr = readStr.components(separatedBy: "\r\n")
-            readArr.remove(at: 0)
-            for eachmember in readArr {
-                let swmember = NSEntityDescription.insertNewObject(forEntityName: "SW", into: self.swManager.persistentContainer.viewContext) as! SW
-                let memberinfoArr = eachmember.components(separatedBy: ",")
-                swmember.department = memberinfoArr[0]
-                swmember.chinesename = memberinfoArr[1]
-                swmember.englishname = memberinfoArr[2]
-                swmember.employeeid = memberinfoArr[3]
-                swmember.birthday = calcTimeInterval(dateStr: memberinfoArr[4])
-                swmember.photonumber = memberinfoArr[6]
-                swmember.shortnumber = memberinfoArr[7]
-                swmember.email = memberinfoArr[9]
-                swmember.imessage = memberinfoArr[10]
-                urlSessionDownloadFileTest(member: memberinfoArr[2])
-                
-                let exist = fileManager.fileExists(atPath: myDirectory + "/" + memberinfoArr[2] + ".png")
-                if exist {
-                    let image = NSImage(contentsOf: url.appendingPathComponent("\(memberinfoArr[2]).png"))
-                    if let imageRepresentations = image?.representations{
-                        let imageData = NSBitmapImageRep.representationOfImageReps(in: imageRepresentations, using: .PNG, properties: [:])
-                        swmember.photo = imageData as NSData?
-                    }
-                    else{
-                        print("\(memberinfoArr[2]) error Pic")
+        let csvurl = URL(string: "\(dlURL)/ContactsCSV.csv")!
+        let csvrequest = URLRequest(url: csvurl)
+        let csvsession = URLSession.shared
+        let csvdataTask = csvsession.dataTask(with: csvrequest, completionHandler: {(data, response, error) -> Void in
+            if error == nil{
+                if let csvstr =  NSString(data:data! ,encoding: String.Encoding.utf8.rawValue){
+                    self.loadcsvdata(str:csvstr as String)
+                }
+            }else{
+                print("error")
+            }
+        }) as URLSessionTask
+        csvdataTask.resume()
+    }
+    
+    func loadcsvdata(str:String) {
+        var readArr = str.components(separatedBy: "\r\n")
+        readArr.remove(at: 0)
+        for eachmember in readArr {
+            let swmember = NSEntityDescription.insertNewObject(forEntityName: "SW", into: self.swManager.persistentContainer.viewContext) as! SW
+            let memberinfoArr = eachmember.components(separatedBy: ",")
+            swmember.department = memberinfoArr[0]
+            swmember.chinesename = memberinfoArr[1]
+            swmember.englishname = memberinfoArr[2]
+            swmember.employeeid = memberinfoArr[3]
+            swmember.birthday = calcTimeInterval(dateStr: memberinfoArr[4])
+            swmember.photonumber = memberinfoArr[6]
+            swmember.shortnumber = memberinfoArr[7]
+            swmember.email = memberinfoArr[9]
+            swmember.imessage = memberinfoArr[10]
+            let urlmember = memberinfoArr[2].replacingOccurrences(of: " ", with: "%20")
+            let url = URL(string: "\(dlURL)/Pic/\(urlmember).png")!
+            let request = URLRequest(url: url)
+            let session = URLSession.shared
+            let dataTask = session.dataTask(with: request,completionHandler: {(data, response, error) -> Void in
+                if error == nil{
+                    if let imagedata = data {
+                        let httpResponse = response as! HTTPURLResponse
+                        if (httpResponse.statusCode == 404){
+                            swmember.photo = self.setPhotoData(picname: "Person")
+                        }else{
+                            swmember.photo = imagedata as NSObject
+                        }
                     }
                 }else{
-                    print("\(memberinfoArr[2]) no Pic")
+                    swmember.photo = self.setPhotoData(picname: "Person")
                 }
-            }
-            self.swManager.saveAction(nil)
-        } else {
-            print("Null")
+                DispatchQueue.main.async {
+                    self.swManager.saveAction(nil)
+                }
+            }) as URLSessionTask
+            dataTask.resume()
         }
-    }
-    
-    func sessionSimpleDownload(){
-        let url = URL(string: "http://hangge.com/blog/images/logo.png")
-        let request = URLRequest(url: url!)
-        let session = URLSession.shared
-        let downloadTask = session.downloadTask(with: request,
-                                                completionHandler: {
-                                                    (location:URL?, response:URLResponse?, error:Error?)
-                                                    -> Void in
-                                                    //输出下载文件原来的存放目录
-                                                    print("location:\(String(describing: location))")
-                                                    //location位置转换
-                                                    let locationPath = location!.path
-                                                    //拷贝到用户目录
-                                                    let documnets:String = NSHomeDirectory() + "/Documents/1.png"
-                                                    //创建文件管理器
-                                                    let fileManager = FileManager.default
-                                                    try! fileManager.moveItem(atPath: locationPath, toPath: documnets)
-                                                    print("new location:\(documnets)")
-        })
-        downloadTask.resume()
-    }
-    
-    func urlSessionDownloadFileTest(member:String) {
-        let defaultConfigObject = URLSessionConfiguration.default
-        let session = URLSession(configuration: defaultConfigObject, delegate: self, delegateQueue: nil)
-        let urlmember = member.replacingOccurrences(of: " ", with: "%20")
-        let url = URL(string: "\(dlURL)/Pic/\(urlmember).png")!
-        let task = session.downloadTask(with: url)
-        task.resume()
     }
     
     @IBAction func saveAction(_ sender: NSButton){
@@ -153,27 +158,5 @@ class ViewController: NSViewController {
     
     @IBAction func redoAction(_ sender: NSButton) {
         self.swManager.persistentContainer.viewContext.undoManager?.redo()
-    }
-}
-
-extension ViewController: URLSessionDownloadDelegate {
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
-        let fileName = downloadTask.originalRequest?.url?.lastPathComponent
-        let fileManager = FileManager.default
-        let downloadURL = URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent("Documents/Pic").appendingPathComponent(fileName!)
-        do {
-            try fileManager.moveItem(at: location, to: downloadURL)
-        }
-        catch let error {
-            print("error \(error)")
-        }
-    }
-    
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didWriteData bytesWritten: Int64, totalBytesWritten: Int64, totalBytesExpectedToWrite: Int64) {
-        print("receive bytes \(bytesWritten) of totalBytes \(totalBytesExpectedToWrite)")
-    }
-    
-    func urlSession(_ session: URLSession, downloadTask: URLSessionDownloadTask, didResumeAtOffset fileOffset: Int64, expectedTotalBytes: Int64) {
-        print("resumeAtOffset  bytes \(fileOffset) of totalBytes \(expectedTotalBytes)")
     }
 }
