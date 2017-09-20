@@ -13,6 +13,7 @@ class ViewController: NSViewController {
     
     @IBOutlet var arrayController: NSArrayController!
     @IBOutlet weak var tableView: NSTableView!
+    var contacts:NSMutableArray = []
     
     let dlURL = "http://10.42.222.70/AEOverlay/Code_TOOLS/Contacts"
     
@@ -23,20 +24,6 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         try? self.arrayController.fetch(with: nil, merge: true)
-//        let contact = Contacts()
-//        
-//        let saveContactRequest = CNSaveRequest()
-//        do{
-//            let groups = try CNContactStore().groups(matching: nil)
-//            //print(groups)
-//        }catch{
-//            //print(error)
-//        }
-        //let addGroupRequest = CNSaveRequest.init()
-        
-        //let c = CNMutableContact()
-        //contact.setNewContact(contact: c, name: "张三", engname: "san zhang", phoneNum: "15700000000", shortNum: "666666")
-        //saveContactRequest.addMember(c, to: <#T##CNGroup#>)
     }
     
     override func viewDidAppear() {
@@ -80,8 +67,8 @@ class ViewController: NSViewController {
     }
     
     @IBAction func inputAction(_ sender: NSButton) {
-        let selectedObjects:[SW]  = self.arrayController.arrangedObjects as! [SW]
-        for classObject: SW in selectedObjects {
+        let arrangedObjects:[SW]  = self.arrayController.arrangedObjects as! [SW]
+        for classObject: SW in arrangedObjects {
             self.swManager.persistentContainer.viewContext.delete(classObject)
         }
         let csvurl = URL(string: "\(dlURL)/ContactsCSV.csv")!
@@ -158,5 +145,65 @@ class ViewController: NSViewController {
     
     @IBAction func redoAction(_ sender: NSButton) {
         self.swManager.persistentContainer.viewContext.undoManager?.redo()
+    }
+    
+    @IBAction func inputContacts(_ sender: NSButton) {
+        let contact = Contacts()
+        let saveContactRequest = CNSaveRequest()
+        let saveGroupRequest = CNSaveRequest()
+        let store = CNContactStore()
+        let newgroup = CNMutableGroup()
+        newgroup.name = "WKS-SW"
+        saveGroupRequest.add(newgroup, toContainerWithIdentifier: nil)
+        
+        do {
+            try store.execute(saveGroupRequest)
+            print("Add new group:"+"\(newgroup)")
+        }catch{
+            print(error)
+        }
+        
+        let arrangedObjects:[SW]  = self.arrayController.arrangedObjects as! [SW]
+        for classObject: SW in arrangedObjects {
+            print(classObject.englishname!)
+            let c = CNMutableContact()
+            contact.setNewContact(c, name: classObject.chinesename, engname: classObject.englishname, phoneNum: classObject.photonumber, shortNum: classObject.shortnumber, note: classObject.employeeid, birthday: nil, email: classObject.email, imessage: classObject.imessage, photo: classObject.photo as! Data, department: "WKS-SW")
+            saveContactRequest.add(c, toContainerWithIdentifier: nil)
+            saveContactRequest.addMember(c, to: newgroup)
+        }
+        do {
+            try store.execute(saveContactRequest)
+        }catch{
+            print(error)
+        }
+    }
+    
+    @IBAction func clearInput(_ sender: NSButton) {
+        let contactclass = Contacts()
+        contacts = contactclass.fetchcontact()
+        for existconst in contacts {
+            let existcontact = (existconst as! CNContact).mutableCopy() as! CNMutableContact
+            if existcontact.departmentName == "WKS-SW"{
+                contactclass.delete(existcontact)
+            }
+        }
+        let store = CNContactStore()
+        let deleteGroupRequest = CNSaveRequest()
+        do{
+            let groups = try store.groups(matching: nil)
+            for existgroup in groups {
+                if existgroup.name == "WKS-SW" {
+                    let existmutablegroup = existgroup.mutableCopy() as! CNMutableGroup
+                    deleteGroupRequest.delete(existmutablegroup)
+                }
+            }
+        }catch{
+            print(error)
+        }
+        do{
+            try store.execute(deleteGroupRequest)
+        }catch{
+            print(error)
+        }
     }
 }

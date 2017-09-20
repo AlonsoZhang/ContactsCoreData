@@ -1199,7 +1199,7 @@
                                 </tableHeaderView>
                             </scrollView>
                             <searchField wantsLayer="YES" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Q2A-dU-PnA">
-                                <rect key="frame" x="185" y="22" width="815" height="22"/>
+                                <rect key="frame" x="185" y="22" width="615" height="22"/>
                                 <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="vgn-IS-Y5a">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1251,14 +1251,43 @@
                                     <action selector="saveAction:" target="XfG-lQ-9wD" id="8aD-Mn-WhT"/>
                                 </connections>
                             </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Q5L-6D-4tf">
+                                <rect key="frame" x="924" y="16" width="92" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="80" id="gRT-3h-wOp"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="清空导入" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jNs-EV-Orn">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="clearInput:" target="XfG-lQ-9wD" id="kY5-ak-TC1"/>
+                                </connections>
+                            </button>
+                            <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="hgV-t0-GDa">
+                                <rect key="frame" x="814" y="16" width="102" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="90" id="Kli-r6-lju"/>
+                                </constraints>
+                                <buttonCell key="cell" type="push" title="导入通讯录" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="U5S-Gn-MYc">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" size="13" name=".PingFangSC-Regular"/>
+                                </buttonCell>
+                                <connections>
+                                    <action selector="inputContacts:" target="XfG-lQ-9wD" id="8eT-yo-4cR"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="LGr-8E-H05" secondAttribute="bottom" constant="20" id="7UL-6x-8uy"/>
                             <constraint firstAttribute="trailing" secondItem="XoT-ao-zGk" secondAttribute="trailing" constant="20" id="8td-GS-aML"/>
+                            <constraint firstItem="faa-Zr-nSW" firstAttribute="leading" secondItem="Q5L-6D-4tf" secondAttribute="trailing" constant="20" id="Gcr-kv-agi"/>
                             <constraint firstItem="wBP-Ot-uCf" firstAttribute="centerY" secondItem="LGr-8E-H05" secondAttribute="centerY" id="JuM-2Z-8J2"/>
                             <constraint firstItem="SIf-vQ-Mzc" firstAttribute="leading" secondItem="faa-Zr-nSW" secondAttribute="trailing" constant="30" id="LnY-nB-ywN"/>
                             <constraint firstItem="Q2A-dU-PnA" firstAttribute="centerY" secondItem="5Uf-E9-X1i" secondAttribute="centerY" id="MfZ-8N-rCY"/>
+                            <constraint firstItem="hgV-t0-GDa" firstAttribute="leading" secondItem="Q2A-dU-PnA" secondAttribute="trailing" constant="20" id="O6m-ek-Hv6"/>
                             <constraint firstAttribute="trailing" secondItem="q8B-1E-Q43" secondAttribute="trailing" constant="20" id="PFQ-Us-e8e"/>
+                            <constraint firstItem="Q5L-6D-4tf" firstAttribute="centerY" secondItem="hgV-t0-GDa" secondAttribute="centerY" id="RpW-nC-ntu"/>
                             <constraint firstItem="faa-Zr-nSW" firstAttribute="centerY" secondItem="Q2A-dU-PnA" secondAttribute="centerY" id="RxM-zR-jLj"/>
                             <constraint firstItem="5Uf-E9-X1i" firstAttribute="leading" secondItem="wBP-Ot-uCf" secondAttribute="trailing" constant="30" id="Ulg-hy-R4U"/>
                             <constraint firstItem="XoT-ao-zGk" firstAttribute="centerY" secondItem="SIf-vQ-Mzc" secondAttribute="centerY" id="WCP-2y-Mf7"/>
@@ -1269,8 +1298,9 @@
                             <constraint firstItem="LGr-8E-H05" firstAttribute="leading" secondItem="kfk-Ol-W1P" secondAttribute="leading" constant="20" id="kWU-lB-HXa"/>
                             <constraint firstItem="5Uf-E9-X1i" firstAttribute="centerY" secondItem="wBP-Ot-uCf" secondAttribute="centerY" id="kds-fU-hcS"/>
                             <constraint firstItem="q8B-1E-Q43" firstAttribute="top" secondItem="kfk-Ol-W1P" secondAttribute="top" constant="20" id="lvr-U4-aWn"/>
-                            <constraint firstItem="faa-Zr-nSW" firstAttribute="leading" secondItem="Q2A-dU-PnA" secondAttribute="trailing" constant="30" id="qlw-Xi-T4d"/>
+                            <constraint firstItem="hgV-t0-GDa" firstAttribute="centerY" secondItem="Q2A-dU-PnA" secondAttribute="centerY" id="m7C-0G-2hO"/>
                             <constraint firstItem="wBP-Ot-uCf" firstAttribute="leading" secondItem="LGr-8E-H05" secondAttribute="trailing" constant="30" id="wDJ-vT-TRk"/>
+                            <constraint firstItem="Q5L-6D-4tf" firstAttribute="leading" secondItem="hgV-t0-GDa" secondAttribute="trailing" constant="20" id="wPw-rX-B9G"/>
                             <constraint firstItem="SIf-vQ-Mzc" firstAttribute="centerY" secondItem="faa-Zr-nSW" secondAttribute="centerY" id="xtD-bn-k44"/>
                         </constraints>
                     </view>
