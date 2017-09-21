@@ -13,6 +13,9 @@ class ViewController: NSViewController {
     
     @IBOutlet var arrayController: NSArrayController!
     @IBOutlet weak var tableView: NSTableView!
+    @IBOutlet weak var clearBtn: NSButton!
+    let GROUP_NAME = "WKS-SW"
+    
     var contacts:NSMutableArray = []
     
     let dlURL = "http://10.42.222.70/AEOverlay/Code_TOOLS/Contacts"
@@ -118,9 +121,9 @@ class ViewController: NSViewController {
                 }else{
                     swmember.photo = self.setPhotoData(picname: "Person")
                 }
-                DispatchQueue.main.async {
-                    self.swManager.saveAction(nil)
-                }
+//                DispatchQueue.main.async {
+//                    self.swManager.saveAction(nil)
+//                }
             }) as URLSessionTask
             dataTask.resume()
         }
@@ -148,12 +151,14 @@ class ViewController: NSViewController {
     }
     
     @IBAction func inputContacts(_ sender: NSButton) {
+        self.swManager.saveAction(nil)
+        clearInput(clearBtn)
         let contact = Contacts()
         let saveContactRequest = CNSaveRequest()
         let saveGroupRequest = CNSaveRequest()
         let store = CNContactStore()
         let newgroup = CNMutableGroup()
-        newgroup.name = "WKS-SW"
+        newgroup.name = GROUP_NAME
         saveGroupRequest.add(newgroup, toContainerWithIdentifier: nil)
         
         do {
@@ -165,9 +170,9 @@ class ViewController: NSViewController {
         
         let arrangedObjects:[SW]  = self.arrayController.arrangedObjects as! [SW]
         for classObject: SW in arrangedObjects {
-            print(classObject.englishname!)
             let c = CNMutableContact()
-            contact.setNewContact(c, name: classObject.chinesename, engname: classObject.englishname, phoneNum: classObject.photonumber, shortNum: classObject.shortnumber, note: classObject.employeeid, birthday: nil, email: classObject.email, imessage: classObject.imessage, photo: classObject.photo as! Data, department: "WKS-SW")
+            let birthdaycomponents = calcDateComponents(timeinterval: classObject.birthday)
+            contact.setNewContact(c, name: classObject.chinesename, engname: classObject.englishname, phoneNum: classObject.photonumber, shortNum: classObject.shortnumber, note: classObject.employeeid, birthday: birthdaycomponents, email: classObject.email, imessage: classObject.imessage, photo: classObject.photo as! Data, department: GROUP_NAME)
             saveContactRequest.add(c, toContainerWithIdentifier: nil)
             saveContactRequest.addMember(c, to: newgroup)
         }
@@ -178,12 +183,24 @@ class ViewController: NSViewController {
         }
     }
     
+    func calcDateComponents(timeinterval:TimeInterval) -> DateComponents {
+        let format = "yyyy-MM-dd"
+        let dformatter = DateFormatter()
+        dformatter.dateFormat = format
+        dformatter.timeZone = TimeZone(abbreviation: "GMT")
+        let sinceDate = dformatter.date(from: "2001-01-01")
+        let calendar = Calendar.current
+        let calculatedDate = sinceDate?.addingTimeInterval(timeinterval)
+        let components = calendar.dateComponents([.year, .month, .day], from: calculatedDate!)
+        return components
+    }
+    
     @IBAction func clearInput(_ sender: NSButton) {
         let contactclass = Contacts()
         contacts = contactclass.fetchcontact()
         for existconst in contacts {
             let existcontact = (existconst as! CNContact).mutableCopy() as! CNMutableContact
-            if existcontact.departmentName == "WKS-SW"{
+            if existcontact.departmentName == GROUP_NAME{
                 contactclass.delete(existcontact)
             }
         }
@@ -192,7 +209,7 @@ class ViewController: NSViewController {
         do{
             let groups = try store.groups(matching: nil)
             for existgroup in groups {
-                if existgroup.name == "WKS-SW" {
+                if existgroup.name == GROUP_NAME {
                     let existmutablegroup = existgroup.mutableCopy() as! CNMutableGroup
                     deleteGroupRequest.delete(existmutablegroup)
                 }

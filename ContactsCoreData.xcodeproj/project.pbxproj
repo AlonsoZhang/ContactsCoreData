@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E230FDAE1F6A04C900763D7B /* ContactsCSV.csv in Resources */ = {isa = PBXBuildFile; fileRef = E230FDAD1F6A04C900763D7B /* ContactsCSV.csv */; };
 		E230FDB51F6A312800763D7B /* SW+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = E230FDB31F6A312800763D7B /* SW+CoreDataClass.swift */; };
 		E230FDB61F6A312800763D7B /* SW+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = E230FDB41F6A312800763D7B /* SW+CoreDataProperties.swift */; };
 		E2548B511F723F58003A8D94 /* Contacts.m in Sources */ = {isa = PBXBuildFile; fileRef = E2548B501F723F58003A8D94 /* Contacts.m */; };
@@ -20,7 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		E230FDAD1F6A04C900763D7B /* ContactsCSV.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ContactsCSV.csv; sourceTree = "<group>"; };
+		E226D4541F734071009735C9 /* ContactsCoreData.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ContactsCoreData.entitlements; sourceTree = "<group>"; };
 		E230FDB31F6A312800763D7B /* SW+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SW+CoreDataClass.swift"; sourceTree = "<group>"; };
 		E230FDB41F6A312800763D7B /* SW+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SW+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		E2548B4E1F723F57003A8D94 /* ContactsCoreData-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ContactsCoreData-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -68,13 +67,13 @@
 		E28057551F68F5E700479D3D /* ContactsCoreData */ = {
 			isa = PBXGroup;
 			children = (
+				E226D4541F734071009735C9 /* ContactsCoreData.entitlements */,
 				E28057561F68F5E700479D3D /* AppDelegate.swift */,
 				E28057581F68F5E700479D3D /* ViewController.swift */,
 				E280577C1F68F83300479D3D /* CoreDataManager.swift */,
 				E280575D1F68F5E700479D3D /* Assets.xcassets */,
 				E280575F1F68F5E700479D3D /* Main.storyboard */,
 				E28057621F68F5E700479D3D /* Info.plist */,
-				E230FDAD1F6A04C900763D7B /* ContactsCSV.csv */,
 				E280575A1F68F5E700479D3D /* ContactsCoreData.xcdatamodeld */,
 				E2548B4F1F723F58003A8D94 /* Contacts.h */,
 				E2548B501F723F58003A8D94 /* Contacts.m */,
@@ -118,6 +117,11 @@
 						DevelopmentTeam = 8LP5KW6GHL;
 						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -145,7 +149,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E280575E1F68F5E700479D3D /* Assets.xcassets in Resources */,
-				E230FDAE1F6A04C900763D7B /* ContactsCSV.csv in Resources */,
 				E28057611F68F5E700479D3D /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -278,12 +281,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ContactsCoreData/ContactsCoreData.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8LP5KW6GHL;
 				INFOPLIST_FILE = ContactsCoreData/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = wistron.ContactsCoreData;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ContactsCoreData/ContactsCoreData-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
@@ -295,12 +302,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = ContactsCoreData/ContactsCoreData.entitlements;
+				CODE_SIGN_IDENTITY = "Mac Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 8LP5KW6GHL;
 				INFOPLIST_FILE = ContactsCoreData/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				PRODUCT_BUNDLE_IDENTIFIER = wistron.ContactsCoreData;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "ContactsCoreData/ContactsCoreData-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
