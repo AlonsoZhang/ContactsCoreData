@@ -12,7 +12,7 @@ class SWManager: NSObject {
     
     // MARK: - Core Data stack
     
-    lazy var persistentContainer: NSPersistentContainer = {
+    @objc lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "ContactsCoreData")
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error {
@@ -34,7 +34,7 @@ class SWManager: NSObject {
                 try context.save()
             } catch {
                 let nserror = error as NSError
-                NSApplication.shared().presentError(nserror)
+                NSApplication.shared.presentError(nserror)
             }
         }
     }

@@ -14,13 +14,15 @@ class ViewController: NSViewController {
     @IBOutlet var arrayController: NSArrayController!
     @IBOutlet weak var tableView: NSTableView!
     @IBOutlet weak var clearBtn: NSButton!
-    let GROUP_NAME = "WKS-SW"
+    @objc let GROUP_NAME = "WKS-SW"
     
-    var contacts:NSMutableArray = []
+    @objc var contacts:NSMutableArray = []
     
-    let dlURL = "http://10.42.222.70/AEOverlay/Code_TOOLS/Contacts"
+    //@objc let dlURL = "http://10.42.222.70/AEOverlay/Code_TOOLS/Contacts"
     
-    dynamic lazy var swManager: SWManager = {
+    @objc let dlURL = "http://7xrqwh.com1.z0.glb.clouddn.com"
+    
+    @objc dynamic lazy var swManager: SWManager = {
         return SWManager()
     }()
     
@@ -40,10 +42,10 @@ class ViewController: NSViewController {
         newmember.photo = setPhotoData(picname: "Person")
     }
     
-    func calcTimeInterval(dateStr:String) -> TimeInterval {
+    @objc func calcTimeInterval(dateStr:String) -> TimeInterval {
         let format = "yyyy-MM-dd"
         var newdateStr = dateStr
-        if dateStr.characters.count != format.characters.count {
+        if dateStr.count != format.count {
             newdateStr = "2001-01-01"
         }
         let dformatter = DateFormatter()
@@ -55,10 +57,10 @@ class ViewController: NSViewController {
         return timeInterval
     }
     
-    func setPhotoData(picname:String) -> NSData {
-        let image = NSImage(named: picname)
+    @objc func setPhotoData(picname:String) -> NSData {
+        let image = NSImage(named: NSImage.Name(rawValue: picname))
         let imageRep = NSBitmapImageRep(data: (image?.tiffRepresentation)!)
-        let imageData = imageRep?.representation(using: .PNG, properties: [:])
+        let imageData = imageRep?.representation(using: .png, properties: [:])
         return imageData! as NSData
     }
     
@@ -89,7 +91,7 @@ class ViewController: NSViewController {
         csvdataTask.resume()
     }
     
-    func loadcsvdata(str:String) {
+    @objc func loadcsvdata(str:String) {
         var readArr = str.components(separatedBy: "\r\n")
         readArr.remove(at: 0)
         for eachmember in readArr {
@@ -105,7 +107,7 @@ class ViewController: NSViewController {
             swmember.email = memberinfoArr[9]
             swmember.imessage = memberinfoArr[10]
             let urlmember = memberinfoArr[2].replacingOccurrences(of: " ", with: "%20")
-            let url = URL(string: "\(dlURL)/Pic/\(urlmember).png")!
+            let url = URL(string: "\(dlURL)/contactpic/\(urlmember).png")!
             let request = URLRequest(url: url)
             let session = URLSession.shared
             let dataTask = session.dataTask(with: request,completionHandler: {(data, response, error) -> Void in
@@ -135,7 +137,7 @@ class ViewController: NSViewController {
     
     @IBAction func queryAction(_ sender: NSSearchField) {
         let content = sender.stringValue
-        if content.characters.count <= 0 {
+        if content.count <= 0 {
             return
         }
         let predicate: NSPredicate = NSPredicate(format:content)
@@ -183,7 +185,7 @@ class ViewController: NSViewController {
         }
     }
     
-    func calcDateComponents(timeinterval:TimeInterval) -> DateComponents {
+    @objc func calcDateComponents(timeinterval:TimeInterval) -> DateComponents {
         let format = "yyyy-MM-dd"
         let dformatter = DateFormatter()
         dformatter.dateFormat = format
